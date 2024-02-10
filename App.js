@@ -2,11 +2,13 @@ import logo from './logo.svg';
 import React from 'react';
 import './App.css';
 import Game from './Game';
+import WeatherComponent from './WeatherComponent';
 
 function App() {
   return (
     <div className="App">
        <Game />
+       <WeatherComponent />
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>

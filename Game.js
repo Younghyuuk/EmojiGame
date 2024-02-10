@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import './Game.css'; // Make sure to create a corresponding CSS file for styling
+import './style.css'; 
 
-const emojis = ["😀", "😁", "😂", "🤣", "😃", "😄", "😅", "😆", "😉", "😊"];
+const emojis = ["😀", "😁", "😂", "🤣", "😈", "😄", "😅", "😆", "😉", "😊"];
 const doubleEmojis = [...emojis, ...emojis]; // Duplicate emojis for matching pairs
 
 function Game() {
   const [cards, setCards] = useState([]);
   const [turns, setTurns] = useState(0);
+  const [score, setScore] = useState(0);
   const [choiceOne, setChoiceOne] = useState(null);
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(true);
 
   // Shuffle cards
   const shuffleCards = () => {
@@ -21,11 +23,18 @@ function Game() {
     setChoiceTwo(null);
     setCards(shuffledCards);
     setTurns(0);
+    setScore(0);
+    // setShowInstructions(false);
   };
 
   // Handle a card selection
   const handleChoice = (card) => {
-    choiceOne ? setChoiceTwo(card) : setChoiceOne(card);
+    // Check if the clicked card is the same as the first choice
+    if (card === choiceTwo) {
+      return;
+    }
+    // Set the second choice if it's empty, otherwise set the first choice
+    choiceTwo ? setChoiceOne(card) : setChoiceTwo(card);
   };
 
   // Compare two selected cards
@@ -42,6 +51,7 @@ function Game() {
             }
           });
         });
+        setScore(prevScore => prevScore + 1);
         resetTurn();
       } else {
         setTimeout(() => resetTurn(), 1000);
@@ -65,6 +75,11 @@ function Game() {
   return (
     <div className="game">
       <h2>Emoji Matching Game</h2>
+        <div className="instructions">
+          <h3>Instructions</h3>
+          <p>Click on two cards to reveal emojis. If the emojis match, they will stay face up. Try to match all pairs with the fewest turns possible!</p>
+        </div>
+    
       <button onClick={shuffleCards}>New Game</button>
       <div className="card-grid">
         {cards.map(card => (
@@ -76,6 +91,7 @@ function Game() {
         ))}
       </div>
       <p>Turns: {turns}</p>
+      <p>Score: {score}</p> {/* Display the current score */}
     </div>
   );
 }
